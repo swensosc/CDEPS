@@ -238,13 +238,6 @@ contains
 
     do while( reday < reday2) ! mid-interval t-steps thru interval [LB,UB]
 
-       !--- advance to next time in [LB,UB] ---
-       ymd0 = ymd
-       tod0 = tod
-       reday0 = reday
-       call shr_cal_advDateInt(ldt,'seconds',ymd0,tod0,ymd,tod,calendar)
-       call shr_cal_timeSet(reday,ymd,tod,calendar)
-
        if (reday > reday2) then
           ymd = ymd2
           tod = tod2
@@ -258,6 +251,13 @@ contains
        call shr_tInterp_getCosz(cosz,lon,lat,ymd,tod,eccen,mvelpp,lambm0,obliqr,calendar)
        n = n + ldt
        tavCosz = tavCosz + cosz*real(ldt,r8)  ! add to partial sum
+
+       !--- advance to next time in [LB,UB] ---
+       ymd0 = ymd
+       tod0 = tod
+       reday0 = reday
+       call shr_cal_advDateInt(ldt,'seconds',ymd0,tod0,ymd,tod,calendar)
+       call shr_cal_timeSet(reday,ymd,tod,calendar)
 
     end do
     tavCosz = tavCosz/real(n,r8) ! form t-avg
